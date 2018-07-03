@@ -1,0 +1,49 @@
+{
+  "name": "@maxtruxa/http-error",
+  "version": "0.1.0",
+  "description": "Extensible HTTP error class for Node.js",
+  "author": "Max Truxa <dev@maxtruxa.com> (http://maxtruxa.com/)",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxtruxa/http-error.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maxtruxa/http-error/issues"
+  },
+  "dependencies": {
+    "@maxtruxa/user-error": "^2.0.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.0.1",
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.2",
+    "publish-please": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=6.0"
+  },
+  "scripts": {
+    "test": "nyc -- mocha --opts test/mocha.opts test/*.test.js",
+    "test-ci": "nyc --reporter=lcovonly -- mocha --opts test/mocha.opts test/*.test.js",
+    "coverage": "nyc -- mocha --reporter dot --opts test/mocha.opts test/*.test.js",
+    "lint": "eslint --ignore-path .gitignore --cache .",
+    "publish-please": "publish-please",
+    "prepublishOnly": "publish-please guard",
+    "publish-checks": "npm run lint && npm test"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "lib/"
+  ],
+  "keywords": [
+    "error",
+    "exception",
+    "http"
+  ]
+}
