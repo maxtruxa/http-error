@@ -1,6 +1,6 @@
 {
   "name": "@maxtruxa/http-error",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Extensible HTTP error class for Node.js",
   "author": "Max Truxa <dev@maxtruxa.com> (http://maxtruxa.com/)",
   "main": "index.js",
