@@ -9,10 +9,6 @@ function HttpError(code, message, properties) {
     properties = code;
     message = undefined;
     code = undefined;
-  } else if (typeof code === 'string') {
-    properties = message;
-    message = code;
-    code = undefined;
   } else if (typeof message === 'object' && message !== null) {
     properties = message;
     message = undefined;
@@ -37,7 +33,7 @@ function HttpError(code, message, properties) {
   // Take phrase from:
   // - properties.phrase
   // - HttpError.codeToPhrase(code)
-  var phrase;
+  let phrase;
   if (hasOwn.call(this, 'phrase')) {
     phrase = this.phrase;
   } else {

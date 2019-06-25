@@ -2,7 +2,7 @@
 
 const HttpError = require('..');
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res, _next) {
   if (!(err instanceof HttpError)) {
     err = new HttpError(500, {cause: err});
   }

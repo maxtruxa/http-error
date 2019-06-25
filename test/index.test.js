@@ -36,7 +36,9 @@ describe('HttpError', function() {
     // name
 
     it('sets the name from the contructor\'s prototype', function() {
-      function CustomError() { HttpError.call(this); }
+      function CustomError() {
+        HttpError.call(this);
+      }
       inherits(CustomError, HttpError);
       CustomError.prototype.name = 'FooError';
 
@@ -45,7 +47,9 @@ describe('HttpError', function() {
     });
 
     it('sets the name from the contructor', function() {
-      function CustomError() { HttpError.call(this); }
+      function CustomError() {
+        HttpError.call(this);
+      }
       inherits(CustomError, HttpError);
 
       let err = new CustomError();
@@ -66,24 +70,38 @@ describe('HttpError', function() {
       expect(err).to.have.own.property('message', 'Internal Server Error');
     });
 
-    it('xxx', function() {
+    it('sets the code to whatever is specified', function() {
+      // ... and sets related properties correctly.
       let err = new HttpError(404);
       expect(err).to.have.own.property('code', 404);
       expect(err).to.have.own.property('phrase', 'Not Found');
       expect(err).to.have.own.property('message', 'Not Found');
     });
 
-    it('xxx', function() {
+    it('sets the message to the string specified', function() {
       let err = new HttpError(404, 'test');
       expect(err).to.have.own.property('code', 404);
       expect(err).to.have.own.property('phrase', 'Not Found');
       expect(err).to.have.own.property('message', 'test');
     });
 
+    it('sets the code from properties', function() {
+      let err = new HttpError(undefined, undefined, {code: 404});
+      expect(err).to.have.own.property('code', 404);
+      expect(err).to.have.own.property('phrase', 'Not Found');
+      expect(err).to.have.own.property('message', 'Not Found');
+    });
+
+    it('throws if the status code is not a number', function() {
+      expect(() => {
+        new HttpError('foo');
+      }).to.throw(Error, '"code" must be a number');
+    });
+
     // properties
 
     it('sets additional properties', function() {
-      let err = new HttpError(undefined, {foo: 'bar', baz: 42});
+      let err = new HttpError(undefined, undefined, {foo: 'bar', baz: 42});
       expect(err).to.have.own.property('foo', 'bar');
       expect(err).to.have.own.property('baz', 42);
     });
@@ -96,10 +114,35 @@ describe('HttpError', function() {
       expect(err).to.have.own.property('foo', 'bar');
     });
 
+    it('accepts properties as second argument', function() {
+      let err = new HttpError(undefined, {foo: 'bar'});
+      expect(err).to.have.own.property('code', 500);
+      expect(err).to.have.own.property('message', 'Internal Server Error');
+      expect(err).to.have.own.property('message', 'Internal Server Error');
+      expect(err).to.have.own.property('foo', 'bar');
+    });
+
+    // phrase
+
+    it('sets phrase according to code', function() {
+      let err = new HttpError(404);
+      expect(err).to.have.own.property('phrase', 'Not Found');
+    });
+
+    it('sets phrase from properties', function() {
+      let err = new HttpError(404, {phrase: 'Test'});
+      expect(err).to.have.own.property('phrase', 'Test');
+    });
+
+    it('sets phrase to Unknown for unknown code', function() {
+      let err = new HttpError(199);
+      expect(err).to.have.own.property('phrase', 'Unknown');
+    });
+
     // stack
 
     it('sets the stack', function() {
-      let err = new HttpError('foo');
+      let err = new HttpError(500, 'foo');
       expect(err).to.have.own.property('stack');
       let stack = err.stack.split(/\n\s*/);
       expect(stack[0]).to.equal('HttpError: foo');
@@ -108,7 +151,7 @@ describe('HttpError', function() {
 
     it('sets the stack from properties', function() {
       let stack = {};
-      let err = new HttpError({stack});
+      let err = new HttpError(500, {stack});
       expect(err).to.have.own.property('stack', stack);
     });
 
@@ -122,12 +165,12 @@ describe('HttpError', function() {
     });
 
     it('returns a correctly formatted string', function() {
-      let err = new HttpError({name: 'CustomError'});
+      let err = new HttpError(500, {name: 'CustomError'});
       expect(err.toString()).to.equal('CustomError: Internal Server Error');
     });
 
     it('returns a correctly formatted string with a message', function() {
-      let err = new HttpError('test');
+      let err = new HttpError(500, 'test');
       expect(err.toString()).to.equal('HttpError: test');
     });
 
@@ -136,7 +179,7 @@ describe('HttpError', function() {
   describe('JSON.stringify', function() {
 
     it('serializes name and message', function() {
-      let err = new HttpError('test');
+      let err = new HttpError(500, 'test');
       let str = JSON.stringify(err);
       let obj = JSON.parse(str);
       expect(obj).to.have.own.property('name', 'HttpError');
@@ -144,7 +187,7 @@ describe('HttpError', function() {
     });
 
     it('serializes additional properties', function() {
-      let err = new HttpError({foo: 'bar', baz: 'qux'});
+      let err = new HttpError(500, {foo: 'bar', baz: 'qux'});
       let str = JSON.stringify(err);
       let obj = JSON.parse(str);
       expect(obj).to.have.own.property('foo', 'bar');
