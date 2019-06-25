@@ -8,6 +8,8 @@
 
 `HttpError`.
 
+**This README needs some love.**
+
 ```js
 const HttpError = require('@maxtruxa/http-error');
 
@@ -25,6 +27,19 @@ npm install @maxtruxa/http-error
 ## Usage
 
 ### Direct Usage
+
+```js
+const HttpError = require('@maxtruxa/http-error');
+
+// HttpError(code[, message][, properties])
+// HttpError(properties)
+
+throw new HttpError(404);
+throw new HttpError(404, 'some message');
+throw new HttpError(404, {additional: 'information'});
+throw new HttpError(404, 'some message', {additional: 'information'});
+throw new HttpError({code: 404, additional: 'information'});
+```
 
 ### Inheriting
 
