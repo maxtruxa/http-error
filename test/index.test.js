@@ -94,6 +94,7 @@ describe('HttpError', function() {
 
     it('throws if the status code is not a number', function() {
       expect(() => {
+        // eslint-disable-next-line no-new
         new HttpError('foo');
       }).to.throw(Error, '"code" must be a number');
     });
